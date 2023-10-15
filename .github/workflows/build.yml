@@ -66,4 +66,4 @@ jobs:
         run: |-
           cd ./code/services/home_page
           echo "sha=${{github.sha}}" >> $GITHUB_OUTPUT
-          docker push "${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ secrets.REPOSITORY_NAME }}/${{ secrets.RUN_SERVICE_NAME }}:${{ github.sha }}"
+          docker push "${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REPOSITORY_NAME }}/${{ secrets.RUN_SERVICE_NAME }}:${{ github.sha }}"
