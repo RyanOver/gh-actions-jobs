@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      build_tag: ${{ github.sha }}
+      build_tag: ${{ steps.push.outputs.sha }}
 
     steps:
       - name: Checkout
@@ -60,8 +60,10 @@ jobs:
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
       - name: Build and Push Container
+        id: push
         run: |-
           cd ./code/services/home_page
           docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}" ./
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
+          echo ${{github.sha}} >> "$GITHUB_OUTPUT"
     
