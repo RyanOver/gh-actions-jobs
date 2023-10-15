@@ -2,6 +2,9 @@ name: build and push cloud run containers
 
 on:
   workflow_call:
+    outputs:
+      sha:
+        value: ${{ jobs.push.outputs.build_tag }}
     secrets:
       WIF_PROVIDER:
         required: true
