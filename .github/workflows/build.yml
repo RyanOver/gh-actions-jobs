@@ -5,21 +5,28 @@ on:
     outputs:
       sha:
         value: ${{ jobs.push.outputs.build_tag }}
-    secrets:
+    inputs:
       WIF_PROVIDER:
         required: true
+        type: string
       WIF_SERVICE_ACCOUNT:
         required: true
+        type: string
       GAR_LOCATION:
         required: true
+        type: string
       PROJECT_ID:
         required: true
+        type: string
       REPOSITORY_NAME:
         required: true
+        type: string
       RUN_SERVICE_NAME:
         required: true
+        type: string
       RUN_SERVICE_REGION:
         required: true
+        type: string
       
 
 jobs:
@@ -55,7 +62,7 @@ jobs:
           password: '${{ steps.auth.outputs.access_token }}'
           registry: '${{ secrets.GAR_LOCATION }}-docker.pkg.dev'
 
-      - name: Build and Push Container
+      - name: Build Image
         id: build
         run: |-
           cd ./code/services/home_page
