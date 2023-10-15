@@ -50,8 +50,8 @@ jobs:
         uses: 'google-github-actions/auth@v0'
         with:
           token_format: 'access_token'
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' 
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+          workload_identity_provider: '${{ inputs.WIF_PROVIDER }}' 
+          service_account: '${{ inputs.WIF_SERVICE_ACCOUNT }}'
 
       # Authenticate Docker to Google Cloud Artifact Registry
       - name: Docker Auth
@@ -60,17 +60,17 @@ jobs:
         with:
           username: 'oauth2accesstoken'
           password: '${{ steps.auth.outputs.access_token }}'
-          registry: '${{ secrets.GAR_LOCATION }}-docker.pkg.dev'
+          registry: '${{ inputs.GAR_LOCATION }}-docker.pkg.dev'
 
       - name: Build Image
         id: build
         run: |-
           cd ./code/services/home_page
-          docker build -t "${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REPOSITORY_NAME }}/${{ secrets.RUN_SERVICE_NAME }}:${{ github.sha }}" ./
+          docker build -t "${{ inputs.GAR_LOCATION }}-docker.pkg.dev/${{ inputs.PROJECT_ID }}/${{ inputs.REPOSITORY_NAME }}/${{ inputs.RUN_SERVICE_NAME }}:${{ github.sha }}" ./
 
       - name: Push Image
         id: push
         run: |-
           cd ./code/services/home_page
           echo "sha=${{github.sha}}" >> $GITHUB_OUTPUT
-          docker push "${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.REPOSITORY_NAME }}/${{ secrets.RUN_SERVICE_NAME }}:${{ github.sha }}"
+          docker push "${{ inputs.GAR_LOCATION }}-docker.pkg.dev/${{ inputs.PROJECT_ID }}/${{ inputs.REPOSITORY_NAME }}/${{ inputs.RUN_SERVICE_NAME }}:${{ github.sha }}"
